@@ -1,37 +1,96 @@
-// Sort the data array using the greekSearchResults value
-data.sort(function(a, b) {
-  return parseFloat(b.greekSearchResults) - parseFloat(a.greekSearchResults);
-});
+// // View all the data
+// // d3.json("samples.json").then(receivedData => console.log(receivedData));
 
-// Slice the first 10 objects for plotting
-data = data.slice(0, 10);
+// // Access only washing frequency
+// d3.json("samples.json").then(function(data){
+//     wfreq = data.metadata.map(person => person.wfreq);
+//     // console.log(wfreq);
+// });
 
-// Reverse the array due to Plotly's defaults
-data = data.reverse();
+// // sort wfreq in descending order
+// d3.json("samples.json").then(function(data){
+//     wfreq = data.metadata.map(person =>
+// person.wfreq).sort((a,b) => b - a);
+//     // console.log(wfreq);
+// });
 
-// Trace1 for the Greek Data
-var trace1 = {
-  x: data.map(row => row.greekSearchResults),
-  y: data.map(row => row.greekName),
-  text: data.map(row => row.greekName),
-  name: "Greek",
-  type: "bar",
-  orientation: "h"
-};
+// // delete null values
+// d3.json("samples.json").then(function(data){
+//     wfreq = data.metadata.map(person =>
+// person.wfreq).sort((a,b) => b - a);
+//     filteredWfreq = wfreq.filter(element => element !=
+// null);
+//     // console.log(filteredWfreq);
+// });
 
-// data
-var data = [trace1];
+// // display the metadata for any individual
+// d3.json("samples.json").then(function(data){
+//     firstPerson = data.metadata[0]; // extracts data from first person in the dataset
+//     Object.entries(firstPerson).forEach(([key, value]) =>
+//       {console.log(key + ': ' + value);});
+// });
 
-// Apply the group bar mode to the layout
-var layout = {
-  title: "Greek gods search results",
-  margin: {
-    l: 100,
-    r: 100,
-    t: 100,
-    b: 100
+// function init() {
+//     data = [{
+//       x: [1, 2, 3, 4, 5],
+//       y: [1, 2, 4, 8, 16] }];
+//     Plotly.newPlot("plot", data);
+//   };
+  
+//   d3.selectAll("#dropdownMenu").on("change", updatePlotly);
+//   function updatePlotly() {
+//     var dropdownMenu = d3.select("#dropdownMenu");
+//     var dataset = dropdownMenu.property("value");
+  
+//     var xData = [1, 2, 3, 4, 5];
+//     var yData = [];
+  
+//     if (dataset === 'dataset1') {
+//       yData = [1, 2, 4, 8, 16];
+//     };
+  
+//     if (dataset === 'dataset2') {
+//       yData = [1, 10, 100, 1000, 10000];
+//     };
+  
+//     var trace = {
+//       x: [xData],
+//       y: [yData],
+//     };
+//     Plotly.restyle("plot", trace);
+//   };
+  
+//   init();
+
+function init() {
+    var selector = d3.select("#selDataset");
+  
+    d3.json("samples.json").then((data) => {
+      console.log(data);
+      var sampleNames = data.names;
+      sampleNames.forEach((sample) => {
+        selector
+          .append("option")
+          .text(sample)
+          .property("value", sample);
+      });
+})}
+  
+  init();
+
+function optionChanged(newSample) {
+    buildMetadata(newSample);
+    buildCharts(newSample);
+}
+
+function buildMetadata(sample) {
+    d3.json("samples.json").then((data) => {
+      var metadata = data.metadata;
+      var resultArray = metadata.filter(sampleObj => sampleObj.id == sample);
+      var result = resultArray[0];
+      var PANEL = d3.select("#sample-metadata");
+  
+      PANEL.html("");
+      PANEL.append("h6").text(result.location);
+    });
   }
-};
-
-// Render the plot to the div tag with id "plot"
-Plotly.newPlot("plot", data, layout);
