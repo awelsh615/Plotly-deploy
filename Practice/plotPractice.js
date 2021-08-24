@@ -34,7 +34,7 @@ Plotly.newPlot("pop-plot", data1, layout1);
 //     y: topFiveCityGrowths,
 //     type: "bar"
 //   };
-//   let data = [trace]; //enclosing data in an array for plotly formatting
+//   let data = [trace]; //enclosing data in an array for plotly sformatting
 //   let layout = {
 //     title: "Most Rapidly Growing Cities",
 //     xaxis: { title: "City" },
